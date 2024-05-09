@@ -1,0 +1,118 @@
+import Integer from "Integer"
+import List from "List"
+import { assertEquals, test } from "Test"
+
+import {
+  Ace,
+  Card,
+  Diamonds,
+  InvalidRank,
+  Jack,
+  Joker,
+  King,
+  NoFace,
+  Queen,
+  Spades,
+  Wildcard,
+  club,
+  consecutiveAceHigh,
+  consecutiveAceLow,
+  consecutiveFlush,
+  diamond,
+  heart,
+  isFaceCard,
+  isNoFaceCard,
+  isNonStandardRank,
+  isRank,
+  isSuit,
+  joker,
+  match,
+  rank,
+  rankFrom,
+  sameCard,
+  sameRank,
+  sameSuit,
+  spade,
+  suit,
+  toOrdinal,
+  toOrdinalLow,
+} from "./Cards"
+
+
+
+test("suit", () => assertEquals(suit(diamond(Ace)), Diamonds))
+test("rank", () => assertEquals(rank(club(InvalidRank)), InvalidRank))
+test(
+  "toOrdinal",
+  () => assertEquals(
+    map(toOrdinal, [InvalidRank, Wildcard, Ace, King, Queen, Jack, NoFace(-100)]),
+    [-1, 0, 14, 13, 12, 11, -100],
+  ),
+)
+
+test(
+  "toOrdinalLow",
+  () => assertEquals(
+    map(toOrdinalLow, [InvalidRank, Wildcard, Ace, King, Queen, Jack, NoFace(-100)]),
+    [-1, 0, 1, 13, 12, 11, -100],
+  ),
+)
+
+test(
+  "rankFrom",
+  () => assertEquals(
+    map(
+      pipe(
+        Integer.toShort,
+        rankFrom,
+      ),
+      List.concat(List.range(11, 15), [0, -1, 8]),
+    ),
+    [Jack, Queen, King, Ace, Wildcard, InvalidRank, NoFace(8)],
+  ),
+)
+
+test("isSuit", () => assertEquals(isSuit(Joker, joker(InvalidRank)), true))
+
+test("isRank", () => assertEquals(isRank(Wildcard, heart(Wildcard)), true))
+
+test("match", () => assertEquals(match(Joker, Wildcard, joker(Wildcard)), true))
+
+test("sameCard", () => assertEquals(sameCard(spade(Wildcard), Card(Spades, Wildcard)), true))
+
+test("sameRank", () => assertEquals(sameRank(spade(Ace), diamond(Ace)), true))
+
+test("sameSuit", () => assertEquals(sameSuit(spade(Ace), spade(Jack)), true))
+
+test(
+  "isFaceCard",
+  () => assertEquals(
+    map(
+      pipe(
+        joker,
+        isFaceCard,
+      ),
+      [NoFace(7), InvalidRank, Wildcard, Ace],
+    ),
+    [false, false, false, true],
+  ),
+)
+
+test("consecutiveAceHigh", () => assertEquals(consecutiveAceHigh(spade(Ace), spade(King)), true))
+
+test(
+  "consecutiveAceHigh",
+  () => assertEquals(consecutiveAceLow(spade(Ace), spade(NoFace(2))), true),
+)
+
+test("consecutiveFlush", () => assertEquals(consecutiveFlush(true, spade(Ace), spade(King)), true))
+
+test("isNoFaceCard", () => assertEquals(isNoFaceCard(spade(NoFace(3))), true))
+
+test(
+  "isNonStandardRank",
+  () => assertEquals(
+    map(isNonStandardRank, [spade(InvalidRank), spade(Wildcard), spade(Jack)]),
+    [true, true, false],
+  ),
+)

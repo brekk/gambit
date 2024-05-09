@@ -1,0 +1,164 @@
+import type { Comparison } from "Compare"
+import type { Maybe } from "Maybe"
+
+import type { Card, Suit } from "@/Cards"
+
+import { EQ, GT, LT } from "Compare"
+import Fn from "Function"
+import List from "List"
+import { Nothing } from "Maybe"
+import Short from "Short"
+
+import Cards from "@/Cards"
+import {
+  Ace,
+  Card,
+  Clubs,
+  Diamonds,
+  Hearts,
+  Jack,
+  Joker,
+  King,
+  NoFace,
+  Queen,
+  Spades,
+  Wildcard,
+} from "@/Cards"
+
+
+
+__makeFullSuit :: Suit -> List Card
+__makeFullSuit = (s) => [
+  ...map(
+    pipe(
+      Short.fromInteger,
+      (v) => Card(s, NoFace(v)),
+    ),
+    List.range(2, 11),
+  ),
+  Card(s, Jack),
+  Card(s, Queen),
+  Card(s, King),
+  Card(s, Ace),
+]
+
+DECK :: List Card
+export DECK = [
+  ...__makeFullSuit(Clubs),
+  ...__makeFullSuit(Diamonds),
+  ...__makeFullSuit(Hearts),
+  ...__makeFullSuit(Spades),
+]
+
+DECK_WITH_JOKERS :: List Card
+export DECK_WITH_JOKERS = [...DECK, Card(Joker, Wildcard), Card(Joker, Wildcard)]
+
+compareWithTrump :: Boolean -> Suit -> Card -> Card -> Comparison
+export compareWithTrump = (aceHigh, trumpSuit, a, b) => where(#[a, b]) {
+  #[Card(d1, v1), Card(d2, v2)] =>
+    do {
+      x = Cards.ordinalRank(aceHigh, v1)
+      y = Cards.ordinalRank(aceHigh, v2)
+      trump1 = d1 == trumpSuit
+      trump2 = d2 == trumpSuit
+      return if (trump1 && !trump2) {
+        LT
+      } else if (trump2 && !trump1) {
+        GT
+      } else {
+        x == y ? EQ : x < y ? GT : LT
+      }
+    }
+}
+
+
+sortDescWithTrump :: Boolean -> Suit -> List Card -> List Card
+export sortDescWithTrump = (aceHigh, trumpSuit, cards) => List.sortBy(
+  compareWithTrump(aceHigh, trumpSuit),
+  cards,
+)
+export sortWithTrump = sortDescWithTrump(true)
+export sortLowWithTrump = sortDescWithTrump(false)
+
+sortDesc :: Boolean -> List Card -> List Card
+export sortDesc = (aceHigh, cards) => List.sortBy(
+  (a, b) => where(#[a, b]) {
+    #[Card(d1, v1), Card(d2, v2)] =>
+      do {
+        x = Cards.ordinalRank(aceHigh, v1)
+        y = Cards.ordinalRank(aceHigh, v2)
+        return x == y ? EQ : x < y ? GT : LT
+      }
+  },
+  cards,
+)
+export sort = sortDesc(true)
+export sortLow = sortDesc(false)
+
+has :: Card -> List Card -> Boolean
+export has = (c, cs) => where(c) {
+  Card(d, v) =>
+    List.any(where { Card(d2, v2) => d == d2 && v == v2 }, cs)
+}
+
+remove :: Card -> List Card -> List Card
+export remove = (c, cs) => List.reject(Cards.sameCard(c))(cs)
+
+anyMatchingRank :: Card -> List Card -> Boolean
+export anyMatchingRank = (c, cs) => where(c) {
+  Card(_, v) =>
+    List.any(where { Card(_, v2) => v == v2 }, cs)
+}
+
+// remove if bifunctor tuples land
+mapFst :: (a -> c) -> #[a, b] -> #[c, b]
+mapFst = (fn, tuple) => where(tuple) {
+  #[a, b] =>
+    #[fn(a), b]
+}
+
+__recut :: Integer -> Integer -> List a -> List (List a)
+__recut = (per, times, xs) => List.repeatWith(
+  (i) => List.slice(i * per, ((i + 1) * per) - 1, xs),
+  times,
+)
+
+deal :: Integer -> Integer -> List Card -> Maybe #[List (List Card), List Card]
+export deal = (perPlayer, totalPlayers, cards) => {
+  totalCards = List.length(cards)
+  toDeal = perPlayer * totalPlayers
+  return if (perPlayer < 0 || totalPlayers < 0 || totalCards < toDeal) {
+    Nothing
+  } else {
+    pipe(
+      List.cut(toDeal),
+      map(mapFst(__recut(perPlayer, totalPlayers))),
+    )(cards)
+  }
+}
+
+filterBySuit :: Suit -> List Card -> List Card
+export filterBySuit = (s, cs) => List.filter(Cards.isSuit(s), cs)
+
+rejectBySuit :: Suit -> List Card -> List Card
+export rejectBySuit = (s, cs) => List.reject(Cards.isSuit(s), cs)
+
+getFaceCards :: List Card -> List Card
+export getFaceCards = List.filter(Cards.isFaceCard)
+
+getNonFaceCards :: List Card -> List Card
+export getNonFaceCards = List.filter(Cards.isNoFaceCard)
+
+dedupe :: List Card -> List Card
+export dedupe = List.uniqueBy(Cards.sameCard)
+
+findSameRank :: List Card -> List (List Card)
+export findSameRank = pipe(
+  List.groupBy(Cards.sameRank),
+  List.reject(
+    pipe(
+      List.length,
+      Fn.equals(1),
+    ),
+  ),
+)

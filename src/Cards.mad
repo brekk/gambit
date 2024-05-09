@@ -1,0 +1,154 @@
+import Math from "Math"
+
+
+
+export type Suit = Clubs | Diamonds | Hearts | Spades | Joker
+export type Rank = NoFace(Short) | Jack | Queen | King | Ace | Wildcard | InvalidRank
+
+export type Card = Card(Suit, Rank)
+
+
+spade :: Rank -> Card
+export spade = Card(Spades)
+
+diamond :: Rank -> Card
+export diamond = Card(Diamonds)
+
+heart :: Rank -> Card
+export heart = Card(Hearts)
+
+club :: Rank -> Card
+export club = Card(Clubs)
+
+joker :: Rank -> Card
+export joker = Card(Joker)
+
+suit :: Card -> Suit
+export suit = where {
+  Card(s, _) =>
+    s
+}
+
+rank :: Card -> Rank
+export rank = where {
+  Card(_, v) =>
+    v
+}
+
+ordinalRank :: Boolean -> Rank -> Short
+export ordinalRank = (aceHigh, d) => where(d) {
+  NoFace(x) =>
+    x
+
+  Jack =>
+    11
+
+  Queen =>
+    12
+
+  King =>
+    13
+
+  Ace =>
+    aceHigh ? 14 : 1
+
+  Wildcard =>
+    0
+
+  InvalidRank =>
+    -1
+}
+
+
+export toOrdinal = ordinalRank(true)
+export toOrdinalLow = ordinalRank(false)
+
+
+rankFrom :: Short -> Rank
+export rankFrom = (i) => if (i == 14 || i == 1) {
+  Ace
+} else if (i == 13) {
+  King
+} else if (i == 12) {
+  Queen
+} else if (i == 11) {
+  Jack
+} else if (i == 0) {
+  Wildcard
+} else if (i < 0 || i > 14) {
+  InvalidRank
+} else {
+  NoFace(i)
+}
+
+isSuit :: Suit -> Card -> Boolean
+export isSuit = (s, c) => suit(c) == s
+
+isRank :: Rank -> Card -> Boolean
+export isRank = (r, c) => rank(c) == r
+
+match :: Suit -> Rank -> Card -> Boolean
+export match = (s, r, c) => isSuit(s, c) && isRank(r, c)
+
+sameCard :: Card -> Card -> Boolean
+export sameCard = (c1, c2) => where(#[c1, c2]) {
+  #[Card(a, v), Card(a2, v2)] =>
+    a == a2 && v == v2
+}
+
+sameSuit :: Card -> Card -> Boolean
+export sameSuit = (c, c2) => suit(c) == suit(c2)
+
+sameRank :: Card -> Card -> Boolean
+export sameRank = (c, c2) => rank(c) == rank(c2)
+
+consecutiveTo :: Boolean -> Card -> Card -> Boolean
+export consecutiveTo = (aceHigh, c1, c2) => {
+  check = pipe(
+    rank,
+    ordinalRank(aceHigh),
+  )
+  return Math.abs(check(c1) - check(c2)) == 1
+}
+
+export consecutiveAceHigh = consecutiveTo(true)
+export consecutiveAceLow = consecutiveTo(false)
+
+consecutiveFlush :: Boolean -> Card -> Card -> Boolean
+export consecutiveFlush = (aceHigh, c1, c2) => consecutiveTo(aceHigh, c1, c2) && sameSuit(c1, c2)
+
+isNoFaceCard :: Card -> Boolean
+export isNoFaceCard = where {
+  Card(_, NoFace(_)) =>
+    true
+
+  _ =>
+    false
+}
+
+isFaceCard :: Card -> Boolean
+export isFaceCard = where {
+  Card(_, NoFace(_)) =>
+    false
+
+  Card(_, InvalidRank) =>
+    false
+
+  Card(_, Wildcard) =>
+    false
+
+  _ =>
+    true
+}
+
+isNonStandardRank :: Card -> Boolean
+export isNonStandardRank = where {
+  Card(_, InvalidRank) =>
+    true
+
+  Card(_, Wildcard) =>
+    true
+
+  _ =>
+    false
+}
