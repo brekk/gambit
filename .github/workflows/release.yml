@@ -32,16 +32,16 @@ jobs:
     needs: check-version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ env.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node-version }}
 
       - name: "Changelog: generate changelog"
         id: changelog
-        uses: TriPSs/conventional-changelog-action@v3.4.1
+        uses: TriPSs/conventional-changelog-action@v5.2.1
         with:
           presets: "conventionalcommits"
           github-token: ${{ secrets.GITHUB_TOKEN }}
