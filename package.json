@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "madmarkdown-renderer": "file:madlib_modules/MadMarkdownRenderer"
+  }
+}

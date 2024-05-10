@@ -2,39 +2,118 @@ import Math from "Math"
 
 
 
+/**
+ * A type which specifies one of five categories for cards
+ * @since 0.0.1
+ * @example
+ * import type { Suit } from "Gambit"
+ */
 export type Suit = Clubs | Diamonds | Hearts | Spades | Joker
+
+/**
+ * A type which specifies the point value of a given card.
+ * In addition to traditional values, two additional constructors: Wildcard and InvalidRank
+ * are exported.
+ * @since 0.0.1
+ * @example
+ * import type { Rank } from "Gambit"
+ */
 export type Rank = NoFace(Short) | Jack | Queen | King | Ace | Wildcard | InvalidRank
 
+/**
+ * A type which specifies a given Suit and Rank combination
+ * @since 0.0.1
+ * @example
+ * import type { Card } from "Gambit"
+ * import { Card } from "Gambit"
+ * aceOfSpades = Card(Spades, Ace)
+ */
 export type Card = Card(Suit, Rank)
 
-
+/**
+ * A sugar constructor for Spades
+ * @since 0.0.1
+ * @example
+ * import { spade } from "Gambit"
+ * aceOfSpades = spade(Ace)
+ */
 spade :: Rank -> Card
 export spade = Card(Spades)
 
+/**
+ * A sugar constructor for Diamonds
+ * @since 0.0.1
+ * @example
+ * import { diamond } from "Gambit"
+ * aceOfDiamonds = diamond(Ace)
+ */
 diamond :: Rank -> Card
 export diamond = Card(Diamonds)
 
+/**
+ * A sugar constructor for Hearts
+ * @since 0.0.1
+ * @example
+ * import { heart } from "Gambit"
+ * aceOfHearts = heart(Ace)
+ */
 heart :: Rank -> Card
 export heart = Card(Hearts)
 
+/**
+ * A sugar constructor for Clubs
+ * @since 0.0.1
+ * @example
+ * import { club } from "Gambit"
+ * aceOfClubs = club(Ace)
+ */
 club :: Rank -> Card
 export club = Card(Clubs)
 
+/**
+ * A sugar constructor for Jokers
+ * @since 0.0.1
+ * @example
+ * import { joker } from "Gambit"
+ * aceOfJokers = joker(Ace)
+ */
 joker :: Rank -> Card
 export joker = Card(Joker)
 
+/**
+ * Get the Suit of a given Card
+ * @since 0.0.1
+ * @example
+ * import { Ace, Clubs, club, suit } from "Gambit"
+ * suit(club(Ace)) == Clubs // true
+ */
 suit :: Card -> Suit
 export suit = where {
   Card(s, _) =>
     s
 }
 
+/**
+ * Get the Rank of a given Card
+ * @since 0.0.1
+ * @example
+ * import { Ace, club, rank } from "Gambit"
+ * rank(club(Ace)) == Ace // true
+ */
 rank :: Card -> Rank
 export rank = where {
   Card(_, v) =>
     v
 }
 
+/**
+ * Convert a Rank to a numeric value with respect to ace-high evaluation
+ * @since 0.0.1
+ * @example
+ * import { Ace, ordinalRank } from "Gambit"
+ * ordinalRank(true, Ace) == 14 // true
+ * ordinalRank(false, Ace) == 1 // true
+ */
 ordinalRank :: Boolean -> Rank -> Short
 export ordinalRank = (aceHigh, d) => where(d) {
   NoFace(x) =>
@@ -59,11 +138,31 @@ export ordinalRank = (aceHigh, d) => where(d) {
     -1
 }
 
-
+/**
+ * Convert a Rank to a numeric value, assuming ace-high evaluation
+ * @since 0.0.1
+ * @example
+ * import { Ace, ordinalRank } from "Gambit"
+ * toOrdinal(Ace) == 14 // true
+ */
 export toOrdinal = ordinalRank(true)
+
+/**
+ * Convert a Rank to a numeric value, assuming ace-low evaluation
+ * @since 0.0.1
+ * @example
+ * import { Ace, ordinalRank } from "Gambit"
+ * toOrdinal(Ace) == 1 // true
+ */
 export toOrdinalLow = ordinalRank(false)
 
-
+/**
+ * Convert a Short numeric value to a Rank
+ * @since 0.0.1
+ * @example
+ * import { Ace, rankFrom } from "Gambit"
+ * rankFrom(1) == Ace // true
+ */
 rankFrom :: Short -> Rank
 export rankFrom = (i) => if (i == 14 || i == 1) {
   Ace
@@ -81,27 +180,77 @@ export rankFrom = (i) => if (i == 14 || i == 1) {
   NoFace(i)
 }
 
+/**
+ * Test whether a Card has a given Suit
+ * @since 0.0.1
+ * @example
+ * import { isSuit, Clubs, club, Ace } from "Gambit"
+ * isSuit(Clubs, club(Ace)) // true
+ */
 isSuit :: Suit -> Card -> Boolean
 export isSuit = (s, c) => suit(c) == s
 
+/**
+ * Test whether a Card has a given Rank
+ * @since 0.0.1
+ * @example
+ * import { isRank, club, Ace } from "Gambit"
+ * isRank(Ace, club(Ace)) // true
+ */
 isRank :: Rank -> Card -> Boolean
 export isRank = (r, c) => rank(c) == r
 
+/**
+ * Test whether a Card has a given Suit and Rank
+ * @since 0.0.1
+ * @example
+ * import { match, Clubs, Ace, club } from "Gambit"
+ * match(Clubs, Ace, club(Ace)) // true
+ */
 match :: Suit -> Rank -> Card -> Boolean
 export match = (s, r, c) => isSuit(s, c) && isRank(r, c)
 
+/**
+ * Test whether two Cards are the same
+ * @since 0.0.1
+ * @example
+ * import { sameCard, Card, King, Ace, Clubs } from "Gambit"
+ * sameCard(Card(Clubs, Ace), Card(Clubs, King)) // false
+ */
 sameCard :: Card -> Card -> Boolean
 export sameCard = (c1, c2) => where(#[c1, c2]) {
   #[Card(a, v), Card(a2, v2)] =>
     a == a2 && v == v2
 }
 
+/**
+ * Test whether two Cards of the same Suit
+ * @since 0.0.1
+ * @example
+ * import { sameSuit, club, Ace, King } from "Gambit"
+ * sameSuit(club(Ace), club(King)) // true
+ */
 sameSuit :: Card -> Card -> Boolean
 export sameSuit = (c, c2) => suit(c) == suit(c2)
 
+/**
+ * Test whether two Cards of the same Rank
+ * @since 0.0.1
+ * @example
+ * import { sameRank, spade, club, Ace } from "Gambit"
+ * sameRank(club(Ace), spade(Ace)) // true
+ */
 sameRank :: Card -> Card -> Boolean
 export sameRank = (c, c2) => rank(c) == rank(c2)
 
+/**
+ * Test whether two Cards are consecutive to each other,
+ * with respect to ace-high evaluation.
+ * @since 0.0.1
+ * @example
+ * import { consecutiveTo, Ace, King, club } from "Gambit"
+ * consecutiveTo(true, club(Ace), club(King)) // true
+ */
 consecutiveTo :: Boolean -> Card -> Card -> Boolean
 export consecutiveTo = (aceHigh, c1, c2) => {
   check = pipe(
@@ -111,12 +260,45 @@ export consecutiveTo = (aceHigh, c1, c2) => {
   return Math.abs(check(c1) - check(c2)) == 1
 }
 
+/**
+ * Test whether two Cards are consecutive to each other,
+ * assuming ace-high evaluation.
+ * @since 0.0.1
+ * @example
+ * import { consecutiveAceHigh, Ace, King, club } from "Gambit"
+ * consecutiveAceHigh(club(Ace), club(King)) // true
+ */
 export consecutiveAceHigh = consecutiveTo(true)
+
+/**
+ * Test whether two Cards are consecutive to each other,
+ * assuming ace-low evaluation.
+ * @since 0.0.1
+ * @example
+ * import { consecutiveAceLow, Ace, King, club } from "Gambit"
+ * consecutiveAceHigh(club(Ace), club(King)) // false
+ */
 export consecutiveAceLow = consecutiveTo(false)
 
+/**
+ * Test whether two Cards are of the same suit and consecutive to each other,
+ * with respect to ace-high evaluation.
+ * @since 0.0.1
+ * @example
+ * import { consecutiveFlush, Ace, King, club, spade } from "Gambit"
+ * consecutiveFlush(true, club(Ace), club(King)) // true
+ * consecutiveFlush(true, club(Ace), spade(King)) // false
+ */
 consecutiveFlush :: Boolean -> Card -> Card -> Boolean
 export consecutiveFlush = (aceHigh, c1, c2) => consecutiveTo(aceHigh, c1, c2) && sameSuit(c1, c2)
 
+/**
+ * Test whether a given Card is not a face card (Ace / King / Queen / Jack)
+ * @since 0.0.1
+ * @example
+ * import { club, Ace, isNoFaceCard } from "Gambit"
+ * isNoFaceCard(club(Ace)) // false
+ */
 isNoFaceCard :: Card -> Boolean
 export isNoFaceCard = where {
   Card(_, NoFace(_)) =>
@@ -126,6 +308,14 @@ export isNoFaceCard = where {
     false
 }
 
+/**
+ * Test whether a given Card is a face card (Ace / King / Queen / Jack)
+ * and not a Wildcard or card of InvalidRank
+ * @since 0.0.1
+ * @example
+ * import { club, Ace, isFaceCard } from "Gambit"
+ * isFaceCard(club(Ace)) // true 
+ */
 isFaceCard :: Card -> Boolean
 export isFaceCard = where {
   Card(_, NoFace(_)) =>
@@ -141,6 +331,13 @@ export isFaceCard = where {
     true
 }
 
+/**
+ * Test whether a given Card is a Wildcard or Card of InvalidRank
+ * @since 0.0.1
+ * @example
+ * import { club, Ace, isNonStandardRank } from "Gambit"
+ * isNonStandardRank(club(Ace)) // false
+ */
 isNonStandardRank :: Card -> Boolean
 export isNonStandardRank = where {
   Card(_, InvalidRank) =>

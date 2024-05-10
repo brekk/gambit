@@ -42,6 +42,14 @@ __makeFullSuit = (s) => [
   Card(s, Ace),
 ]
 
+/**
+ * A full deck of French-suited Cards.
+ * @since 0.0.1
+ * @example
+ * import { DECK } from "Gambit"
+ * import IO from "IO"
+ * IO.pTrace("A deck of cards", DECK)
+ */
 DECK :: List Card
 export DECK = [
   ...__makeFullSuit(Clubs),
@@ -50,9 +58,24 @@ export DECK = [
   ...__makeFullSuit(Spades),
 ]
 
+/**
+ * A full deck of French-suited Cards, plus two Jokers.
+ * @since 0.0.1
+ * @example
+ * import { DECK_WITH_JOKERS } from "Gambit"
+ * import IO from "IO"
+ * IO.pTrace("A deck of cards", DECK_WITH_JOKERS)
+ */
 DECK_WITH_JOKERS :: List Card
 export DECK_WITH_JOKERS = [...DECK, Card(Joker, Wildcard), Card(Joker, Wildcard)]
 
+/**
+ * Compare two cards, with respect to ace-high evaluation and a trump Suit.
+ * @since 0.0.1
+ * @example
+ * import { Ace, compareWithTrump, Clubs, Card, Hearts } from "Gambit"
+ * compareWithTrump(true, Clubs, Card(Clubs, Ace), Card(Hearts, Ace)) // LT
+ */
 compareWithTrump :: Boolean -> Suit -> Card -> Card -> Comparison
 export compareWithTrump = (aceHigh, trumpSuit, a, b) => where(#[a, b]) {
   #[Card(d1, v1), Card(d2, v2)] =>
@@ -71,15 +94,44 @@ export compareWithTrump = (aceHigh, trumpSuit, a, b) => where(#[a, b]) {
     }
 }
 
-
+/**
+ * Sort cards descending, with respect to ace-high evaluation and a trump Suit.
+ * @since 0.0.1
+ * @example
+ * import { sortDescWithTrump, Clubs, DECK } from "Gambit"
+ * sortDescWithTrump(true, Clubs, DECK)
+ */
 sortDescWithTrump :: Boolean -> Suit -> List Card -> List Card
 export sortDescWithTrump = (aceHigh, trumpSuit, cards) => List.sortBy(
   compareWithTrump(aceHigh, trumpSuit),
   cards,
 )
+
+/**
+ * Sort cards descending, assuming ace-high evaluation and with respect to a trump Suit.
+ * @since 0.0.1
+ * @example
+ * import { sortWithTrump, Clubs, DECK } from "Gambit"
+ * sortWithTrump(true, Clubs, DECK)
+ */
 export sortWithTrump = sortDescWithTrump(true)
+
+/**
+ * Sort cards descending, assuming ace-low evaluation and with respect to a trump Suit.
+ * @since 0.0.1
+ * @example
+ * import { sortLowWithTrump, Clubs, DECK } from "Gambit"
+ * sortLowWithTrump(true, Clubs, DECK)
+ */
 export sortLowWithTrump = sortDescWithTrump(false)
 
+/**
+ * Sort cards descending, with respect to ace-high evaluation
+ * @since 0.0.1
+ * @example
+ * import { sortDesc, DECK } from "Gambit"
+ * sortDesc(true, DECK)
+ */
 sortDesc :: Boolean -> List Card -> List Card
 export sortDesc = (aceHigh, cards) => List.sortBy(
   (a, b) => where(#[a, b]) {
@@ -92,18 +144,55 @@ export sortDesc = (aceHigh, cards) => List.sortBy(
   },
   cards,
 )
+
+/**
+ * Sort cards descending, assuming ace-high evaluation
+ * @since 0.0.1
+ * @example
+ * import { sort, DECK } from "Gambit"
+ * sort(DECK)
+ */
 export sort = sortDesc(true)
+
+/**
+ * Sort cards descending, assuming ace-low evaluation
+ * @since 0.0.1
+ * @example
+ * import { sort, DECK } from "Gambit"
+ * sort(DECK)
+ */
 export sortLow = sortDesc(false)
 
+/**
+ * Test whether a given card is within a List of Cards
+ * @since 0.0.1
+ * @example
+ * import { has, club, Ace } from "Gambit"
+ * has(club(Ace), []) // false
+ */
 has :: Card -> List Card -> Boolean
 export has = (c, cs) => where(c) {
   Card(d, v) =>
     List.any(where { Card(d2, v2) => d == d2 && v == v2 }, cs)
 }
 
+/**
+ * Remove a card from a list of cards
+ * @since 0.0.1
+ * @example
+ * import { has, club, Ace } from "Gambit"
+ * remove(club(Ace), [club(Ace)]) // []
+ */
 remove :: Card -> List Card -> List Card
 export remove = (c, cs) => List.reject(Cards.sameCard(c))(cs)
 
+/**
+ * Test a List of Cards for any Card that is of the same rank as a given Card
+ * @since 0.0.1
+ * @example
+ * import { anyMatchingRank, club, Ace, DECK } from "Gambit"
+ * anyMatchingRank(club(Ace), DECK) // true
+ */
 anyMatchingRank :: Card -> List Card -> Boolean
 export anyMatchingRank = (c, cs) => where(c) {
   Card(_, v) =>
@@ -123,6 +212,13 @@ __recut = (per, times, xs) => List.repeatWith(
   times,
 )
 
+/**
+ * Take a list of cards and possibly segment them into sublists of a specific number per player.
+ * @since 0.0.1
+ * @example
+ * import { deal, DECK } from "Gambit"
+ * deal(7, 2, DECK) // Just(#[[sevenCardsForPlayer1, sevenCardsForPlayer2], remainder])
+ */
 deal :: Integer -> Integer -> List Card -> Maybe #[List (List Card), List Card]
 export deal = (perPlayer, totalPlayers, cards) => {
   totalCards = List.length(cards)
@@ -137,21 +233,63 @@ export deal = (perPlayer, totalPlayers, cards) => {
   }
 }
 
+/**
+ * Filter a List of Cards by a given Suit
+ * @since 0.0.1
+ * @example
+ * import { filterBySuit, Clubs, DECK } from "Gambit"
+ * filterBySuit(Clubs, DECK) // only cards of Clubs
+ */
 filterBySuit :: Suit -> List Card -> List Card
 export filterBySuit = (s, cs) => List.filter(Cards.isSuit(s), cs)
 
+/**
+ * Reject a List of Cards by a given Suit
+ * @since 0.0.1
+ * @example
+ * import { rejectBySuit, Clubs, DECK } from "Gambit"
+ * rejectBySuit(Clubs, DECK) // only cards of not Clubs
+ */
 rejectBySuit :: Suit -> List Card -> List Card
 export rejectBySuit = (s, cs) => List.reject(Cards.isSuit(s), cs)
 
+/**
+ * Get face cards from a given list of cards
+ * @since 0.0.1
+ * @example
+ * import { DECK, getFaceCards } from "Gambit"
+ * getFaceCards(DECK) // only Ace / King / Queen / Jack
+ */
 getFaceCards :: List Card -> List Card
 export getFaceCards = List.filter(Cards.isFaceCard)
 
+/**
+ * Get non-face cards from a given list of cards
+ * @since 0.0.1
+ * @example
+ * import { DECK, getNonFaceCards } from "Gambit"
+ * getFaceCards(DECK) // no Aces / Kings / Queens / Jacks
+ */
 getNonFaceCards :: List Card -> List Card
 export getNonFaceCards = List.filter(Cards.isNoFaceCard)
 
+/**
+ * Return a unique list of cards
+ * @since 0.0.1
+ * @example
+ * import { dedupe, club, Ace } from "Gambit"
+ * dedupe([club(Ace), club(Ace), club(Ace)]) // [Card(Clubs, Ace)]
+ */
 dedupe :: List Card -> List Card
 export dedupe = List.uniqueBy(Cards.sameCard)
 
+/**
+ * Find cards which are of the same rank within a list
+ * @since 0.0.1
+ * @example
+ * import { findSameRank, DECK } from "Gambit"
+ * findSameRank(DECK) // a list of lists of cards grouped by rank
+ */
 findSameRank :: List Card -> List (List Card)
 export findSameRank = pipe(
   List.groupBy(Cards.sameRank),
