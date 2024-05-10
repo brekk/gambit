@@ -1,8 +1,16 @@
 {
-  "name": "gambit",
-  "version": "0.0.2",
+  "name": "Gambit",
+  "version": "0.0.3",
+  "madlibVersion": "0.23.13",
   "main": "src/Gambit.mad",
   "importAliases": {
     ".": "src"
-  }
+  },
+  "dependencies": [
+    {
+      "minVersion": "0.0.9",
+      "url": "https://github.com/madlib-lang/maddoc-cli/archive/refs/tags/v0.0.9.zip",
+      "description": "MadDocCli"
+    }
+  ]
 }

@@ -1,3 +1,6 @@
 .repl
 .DS_Store
 build
+madlib_modules
+node_modules
+.module_cache
