@@ -5,9 +5,9 @@
   "main": "src/Main.mad",
   "dependencies": [
     {
-      "minVersion": "0.0.10",
-      "url": "https://github.com/madlib-lang/maddoc-cli/archive/refs/tags/v0.0.10.zip",
-      "description": "maddoc cli - used to generate the documentation for the project"
+      "minVersion": "0.0.11",
+      "url": "https://github.com/madlib-lang/maddoc-cli/archive/refs/tags/v0.0.11.zip",
+      "description": "MadDocCli"
     }
   ]
 }
