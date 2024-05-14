@@ -67,7 +67,14 @@ export DECK = [
  * IO.pTrace("A deck of cards", DECK_WITH_JOKERS)
  */
 DECK_WITH_JOKERS :: List Card
-export DECK_WITH_JOKERS = [...DECK, Card(Joker, Wildcard), Card(Joker, Wildcard)]
+export DECK_WITH_JOKERS = [
+  ...__makeFullSuit(Clubs),
+  ...__makeFullSuit(Diamonds),
+  ...__makeFullSuit(Hearts),
+  ...__makeFullSuit(Spades),
+  Card(Joker, Wildcard),
+  Card(Joker, Wildcard),
+]
 
 /**
  * Compare two cards, with respect to ace-high evaluation and a trump Suit.

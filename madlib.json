@@ -8,8 +8,13 @@
   },
   "dependencies": [
     {
-      "minVersion": "0.0.9",
-      "url": "https://github.com/madlib-lang/maddoc-cli/archive/refs/tags/v0.0.9.zip",
+      "minVersion": "0.0.1",
+      "url": "https://github.com/brekk/clinic/archive/refs/tags/v0.0.1.zip",
+      "description": "Clinic"
+    },
+    {
+      "minVersion": "0.0.11",
+      "url": "https://github.com/madlib-lang/maddoc-cli/archive/refs/tags/v0.0.11.zip",
       "description": "MadDocCli"
     }
   ]

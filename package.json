@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "madmarkdown-renderer": "file:madlib_modules/MadMarkdownRenderer"
+    "madmarkdown-renderer": "file:.github/workflows/madlib_modules/MadMarkdownRenderer",
+    "madui": "file:.github/workflows/madlib_modules/MadUI"
   }
 }

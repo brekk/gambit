@@ -1,6 +1,9 @@
-.repl
 .DS_Store
+.coverage
+.docs
+.module_cache
+.repl
+.tests
 build
 madlib_modules
 node_modules
-.module_cache
