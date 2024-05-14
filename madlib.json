@@ -5,5 +5,12 @@
   "main": "src/Gambit.mad",
   "importAliases": {
     ".": "src"
-  }
+  },
+  "dependencies": [
+    {
+      "minVersion": "0.0.1",
+      "url": "https://github.com/brekk/clinic/archive/refs/tags/v0.0.1.zip",
+      "description": "Clinic"
+    }
+  ]
 }
