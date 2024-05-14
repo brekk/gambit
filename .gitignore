@@ -6,3 +6,4 @@ node_modules
 .module_cache
 .docs
 .tests
+.coverage
