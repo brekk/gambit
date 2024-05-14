@@ -1,4 +1,4 @@
-name: Test Madlib Build
+name: Test Madlib Project
 
 on: [push, workflow_dispatch]
     
