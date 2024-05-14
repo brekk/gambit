@@ -13,6 +13,6 @@ jobs:
         uses: madlib-lang/action-build@main
         with:
           madlibVersion: 0.23.14
-          coverage: true
-          testLLVM: true
-          testJS: true
+          coverage: 'true'
+          testLLVM: 'true'
+          testJS: 'true'
