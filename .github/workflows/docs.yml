@@ -1,34 +1,36 @@
-name: 'Generate documentation'
+name: Generate Docs
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    
 env:
   node-version: 20.x
 
 jobs:
-  publish:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: 🛒 Checking out repository...
+        uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ env.node-version }}
+      - name: ⚙️  Setting up node...
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node-version }}
 
-      - run: npm install -g @madlib-lang/madlib
-
-      - run: |
-          cd .github/workflows
+      - name: 😈 Automatically generating documentation...
+        run: |
+          npm install -g @madlib-lang/madlib
           madlib install
-
-      - run: |
-          cd .github/workflows
           madlib compile --bundle -i madlib_modules/MadDocCli/src/Main.mad -o build/src/maddoc-cli.js
           node build/src/maddoc-cli.js src
 
-      - name: Publish documentation
+      - name: 🩺 Deploying documentation...
         uses: JamesIves/github-pages-deploy-action@4.1.1
         with:
           branch: docs
-          folder: .github/workflows/.docs
+          folder: .docs
+
