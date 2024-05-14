@@ -25,12 +25,12 @@ import {
   diamond,
   heart,
   spade,
-} from "@/Card"
+} from "@/Cards"
 import {
   DECK,
   DECK_WITH_JOKERS,
-  __makeFullSuit,
-  __recut,
+  // __makeFullSuit,
+  // __recut,
   anyMatchingRank,
   deal,
   dedupe,
@@ -127,29 +127,6 @@ test(
 
 test("deal - invalid counts", () => assertEquals(deal(-1, -1, []), Nothing))
 test("deal - invalid inputs", () => assertEquals(deal(4, 15, DECK_WITH_JOKERS), Nothing))
-
-test(
-  "__makeFullSuit",
-  () => assertEquals(
-    __makeFullSuit(Joker),
-    [
-      Card(Joker, NoFace(2)),
-      Card(Joker, NoFace(3)),
-      Card(Joker, NoFace(4)),
-      Card(Joker, NoFace(5)),
-      Card(Joker, NoFace(6)),
-      Card(Joker, NoFace(7)),
-      Card(Joker, NoFace(8)),
-      Card(Joker, NoFace(9)),
-      Card(Joker, NoFace(10)),
-      Card(Joker, Jack),
-      Card(Joker, Queen),
-      Card(Joker, King),
-      Card(Joker, Ace),
-    ],
-  ),
-)
-
 
 test(
   "filterBySuit",
@@ -339,58 +316,6 @@ test(
     true,
   ),
 )
-
-test(
-  "__recut",
-  () => assertEquals(
-    __recut(
-      3,
-      3,
-      [
-        Card(Hearts, King),
-        Card(Diamonds, Queen),
-        Card(Spades, Jack),
-        Card(Hearts, NoFace(10)),
-        Card(Spades, NoFace(8)),
-        Card(Joker, NoFace(7)),
-        Card(Diamonds, Ace),
-        Card(Joker, Ace),
-        Card(Joker, Wildcard),
-        Card(Joker, InvalidRank),
-      ],
-    ),
-    [
-      [Card(Hearts, King), Card(Diamonds, Queen), Card(Spades, Jack)],
-      [Card(Hearts, NoFace(10)), Card(Spades, NoFace(8)), Card(Joker, NoFace(7))],
-      [Card(Diamonds, Ace), Card(Joker, Ace), Card(Joker, Wildcard)],
-    ],
-  ),
-)
-
-
-
-// test(
-//   "getStraights",
-//   () => assertEquals(
-//     getConsecutiveRuns(
-//       true,
-//       true,
-//       [
-//         Card(Diamonds, Ace),
-//         Card(Diamonds, King),
-//         Card(Diamonds, Queen),
-//         Card(Diamonds, NoFace(2)),
-//         Card(Diamonds, NoFace(4)),
-//         Card(Diamonds, NoFace(6)),
-//         Card(Diamonds, NoFace(5)),
-//       ],
-//     ),
-//     [
-//       [Card(Diamonds, Ace), Card(Diamonds, King), Card(Diamonds, Queen)],
-//       [Card(Diamonds, NoFace(6)), Card(Diamonds, NoFace(5)), Card(Diamonds, NoFace(4))],
-//     ],
-//   ),
-// )
 
 test(
   "dedupe",
