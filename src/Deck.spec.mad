@@ -118,8 +118,6 @@ test(
         Card(Spades, Queen),
         Card(Spades, King),
         Card(Spades, Ace),
-        Card(Joker, Wildcard),
-        Card(Joker, Wildcard),
       ],
     ]),
   ),

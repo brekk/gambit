@@ -21,4 +21,5 @@ jobs:
         run: |
           npm install -g @madlib-lang/madlib
           madlib install
-          madlib test --coverage
+          madlib test --coverage -t llvm
+          madlib test --coverage -t node
