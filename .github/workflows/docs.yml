@@ -22,7 +22,9 @@ jobs:
       - name: 😈 Automatically generating documentation...
         run: |
           npm install -g @madlib-lang/madlib
-          # madlib install
+          mv madlib_modules magic
+          madlib install
+          mv magic madlib_modules
           madlib compile --bundle -i madlib_modules/MadDocCli/src/Main.mad -o build/src/maddoc-cli.js
           node build/src/maddoc-cli.js src
           echo "wrapEventHandler..."
