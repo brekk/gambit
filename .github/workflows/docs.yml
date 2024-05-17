@@ -29,6 +29,12 @@ jobs:
           madlib install
           madlib compile --bundle -i madlib_modules/MadDocCli/src/Main.mad -o build/src/maddoc-cli.js
           node build/src/maddoc-cli.js src
+          echo "GITHUB_EH_TRANSPILED_NAME=$(cat .docs/bundle.js | grep _wrapEventHandler_ -m 1 | cut -d" " -f4)" >> $GITHUB_ENV
+          echo "GITHUB_EC_TRANSPILED_NAME=$(cat .docs/bundle.js | grep _EventConstructors_ -m 1 | cut -d" " -f4)" >> $GITHUB_ENV
+          echo $GITHUB_EC_TRANSPILED_NAME
+          echo $GITHUB_EH_TRANSPILED_NAME
+          sed -i "s/const handler = wrapEventHandler/shitass\nconst handler = wrapEventHandler/g"
+          cat .docs/bundle.js | grep shitass -C5
 
       - name: 🩺 Deploying documentation...
         uses: JamesIves/github-pages-deploy-action@4.1.1
