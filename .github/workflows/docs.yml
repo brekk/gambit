@@ -32,9 +32,9 @@ jobs:
           grep _EventConstructors_ -m 1 .docs/bundle.js | cut -d" " -f4
           echo "EC_TRANSPILED_NAME=$(grep _EventConstructors_ -m 1 .docs/bundle.js | cut -d" " -f4)" >> "$GITHUB_ENV"
           echo "LIST TRANSPILED VARIABLE NAMES"
-          echo "$EC_TRANSPILED_NAME"
-          echo "$EH_TRANSPILED_NAME"
-          sed -i "s/const handler = wrapEventHandler/shitass\nconst handler = wrapEventHandler/g"
+          echo "event constructor: $EC_TRANSPILED_NAME"
+            echo "event handler: $EH_TRANSPILED_NAME"
+          sed -i "s/const handler = wrapEventHandler/shitass\nconst handler = wrapEventHandler/g" .docs/bundle.js
           echo "LIST CONTENTS OF DOCS"
           ls -Algpe .docs
           grep shitass -C5 .docs/bundle.js
