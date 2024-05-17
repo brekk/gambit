@@ -1759,7 +1759,8 @@
       globalActions = globalActions.n;
     }
     keysForWindowEvents.forEach((ga) => {
-      shitass
+      const wrapEventHandler = "_d0ca1__wrapEventHandler__373";
+const EventConstructors = "_aed0f_EventConstructors__352";
 const handler = wrapEventHandler(env, EventConstructors[ga.eventName], ga.eventHandler);
       window.addEventListener(ga.eventName, handler);
       if (ga.eventName === "popstate") {
