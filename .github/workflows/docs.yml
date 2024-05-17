@@ -25,7 +25,6 @@ jobs:
           madlib install
           madlib compile --bundle -i madlib_modules/MadDocCli/src/Main.mad -o build/src/maddoc-cli.js
           node build/src/maddoc-cli.js src
-          ls -Algp .docs
           echo "wrapEventHandler..."
           grep _wrapEventHandler_ -m 1 .docs/bundle.js | cut -d" " -f4
           EH_TRANSPILED_NAME=\"$(grep _wrapEventHandler_ -m 1 .docs/bundle.js | cut -d" " -f4)\"
@@ -37,10 +36,9 @@ jobs:
           echo "LIST TRANSPILED VARIABLE NAMES"
           echo "event constructor: $EC_TRANSPILED_NAME"
           echo "event handler: $EH_TRANSPILED_NAME"
-          sed -i "s/const handler = wrapEventHandler/shitass\nconst handler = wrapEventHandler/g" .docs/bundle.js
+          sed -i "s/const handler = wrapEventHandler/const wrapEventHandler = $(echo $EH_TRANSPILED_NAME);\nconst EventConstructors = $(echo $EC_TRANSPILED_NAME);\nconst handler = wrapEventHandler/g" .docs/bundle.js
           echo "LIST CONTENTS OF DOCS"
-          ls -Algp .docs
-          grep shitass -C5 .docs/bundle.js
+          grep "handler =" -C5 .docs/bundle.js
 
       - name: 🩺 Deploying documentation...
         uses: JamesIves/github-pages-deploy-action@4.1.1
