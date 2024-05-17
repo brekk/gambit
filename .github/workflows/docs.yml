@@ -25,8 +25,8 @@ jobs:
           madlib install
           madlib compile --bundle -i madlib_modules/MadDocCli/src/Main.mad -o build/src/maddoc-cli.js
           node build/src/maddoc-cli.js src
-          echo "GITHUB_EH_TRANSPILED_NAME=$(cat .docs/bundle.js | grep _wrapEventHandler_ -m 1 | cut -d" " -f4)" >> $GITHUB_ENV
-          echo "GITHUB_EC_TRANSPILED_NAME=$(cat .docs/bundle.js | grep _EventConstructors_ -m 1 | cut -d" " -f4)" >> $GITHUB_ENV
+          echo "GITHUB_EH_TRANSPILED_NAME=$(grep _wrapEventHandler_ -m 1 .docs/bundle.js | cut -d" " -f4)" >> $GITHUB_ENV
+          echo "GITHUB_EC_TRANSPILED_NAME=$(grep _EventConstructors_ -m 1 .docs/bundle.js | cut -d" " -f4)" >> $GITHUB_ENV
           echo "LIST TRANSPILED VARIABLE NAMES"
           echo $GITHUB_EC_TRANSPILED_NAME
           echo $GITHUB_EH_TRANSPILED_NAME
