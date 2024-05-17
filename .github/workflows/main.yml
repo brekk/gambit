@@ -1,6 +1,7 @@
 name: Test Madlib Project
 
-on: [push, workflow_dispatch]
+# on: [push, workflow_dispatch]
+on: [workflow_dispatch]
     
 env:
   node-version: 20.x
