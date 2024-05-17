@@ -1,0 +1,34 @@
+#iftarget js
+import type { Error } from "IO"
+import type { CommandOptions, CommandResult } from "Process"
+import type { Wish } from "Wish"
+
+import File from "File"
+import IO from "IO"
+import { Argv, exec, getCurrentWorkingDirectory, getExecutablePath } from "Process"
+import String from "String"
+
+
+
+export alias IOUtils = {
+  args :: List String,
+  exec :: String -> List String -> CommandOptions -> Wish CommandResult CommandResult,
+  getCurrentWorkingDirectory :: {} -> String,
+  getExecutablePath :: {} -> String,
+  writeFile :: String -> String -> Wish Error {},
+}
+
+
+defaultIOUtils :: IOUtils
+export defaultIOUtils = {
+  args: Argv,
+  writeFile: File.write,
+  getCurrentWorkingDirectory,
+  getExecutablePath,
+  exec: (cmd, args, opts) => {
+    IO.putLine(`Running: ${cmd} ${String.join(" ", args)}...`)
+    return exec(cmd, args, opts)
+  },
+}
+
+#endif

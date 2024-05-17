@@ -1,0 +1,22 @@
+import type { Element } from "MadUI"
+
+import { a, code, href, text } from "MadUI"
+
+
+
+export alias Config a = {
+  codeView :: String -> String -> Element a,
+  linkView :: String -> String -> Element a,
+}
+
+defaultConfig :: Config a
+export defaultConfig = {
+  linkView: (name, url) => <a href={url}>{name}</a>,
+  codeView: (_, content) => <code>{content}</code>,
+}
+
+setLinkView :: (String -> String -> Element a) -> Config a -> Config a
+export setLinkView = (linkView, config) => ({ ...config, linkView })
+
+setCodeView :: (String -> String -> Element a) -> Config a -> Config a
+export setCodeView = (codeView, config) => ({ ...config, codeView })

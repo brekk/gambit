@@ -1,0 +1,21 @@
+{
+  "name": "MadMarkdownRenderer",
+  "version": "2.0.4",
+  "madlibVersion": "0.23.14",
+  "main": "src/Main.mad",
+  "importAliases": {
+    ".": "src"
+  },
+  "dependencies": [
+    {
+      "minVersion": "7.0.2",
+      "url": "https://github.com/madlib-lang/madui/archive/refs/tags/v7.0.2.zip",
+      "description": "MadUI"
+    },
+    {
+      "minVersion": "0.0.5",
+      "url": "https://github.com/madlib-lang/madmarkdown-parser/archive/refs/tags/v0.0.5.zip",
+      "description": "MadMarkdownParser"
+    }
+  ]
+}

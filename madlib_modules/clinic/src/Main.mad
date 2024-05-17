@@ -1,0 +1,60 @@
+import { noop } from "Function"
+import IO from "IO"
+import List from "List"
+import String from "String"
+import Terminal from "Terminal"
+import Wish from "Wish"
+
+import Buffer from "@/Buffer"
+import { choose, chooseAction, prompt } from "@/Clinic"
+
+
+
+tagOut = (tag) => pipe(
+  IO.pTrace(tag),
+  noop,
+)
+/*
+pipe(
+  prompt("What is your name?"),
+  map(String.toUpper),
+  Wish.fulfill(tagOut("BAD"), tagOut("GOOD")),
+)(Buffer.make(""))
+*/
+/*
+opts = {{
+  "a": () => IO.put("YOU SAID A"),
+  "b": () => IO.put("YOU SAID B"),
+  "c": () => IO.put("YOU SAID C"),
+}}
+listicle = (o, x) => `⌜ ⌝\n${
+  pipe(
+    List.mapWithIndex(
+    (_o, y) => where(_o) {
+      #[label, _] =>
+        x == y
+        ? Terminal.ansiColor([Terminal.ansi.BGBrightWhite, Terminal.ansi.FGRed], label)
+        : label
+    },
+  ),
+  String.join("\n"),
+)(o)
+}\n⌞ ⌟`
+*/
+// needs rework for cursor
+// chooseAction(opts, listicle)
+main = () => {
+  chooser = (o, x) => `⌜ ⌝\n${
+    pipe(
+      List.mapWithIndex(
+        (label, y) => x == y
+          ? Terminal.ansiColor([Terminal.ansi.BGBrightWhite, Terminal.ansi.FGRed], label)
+          : label,
+      ),
+      String.join("\n"),
+    )(o)
+  }\n⌞ ⌟`
+  pipe(
+    Wish.fulfill(tagOut("BAD"), tagOut("GOOD")),
+  )(choose([" a ", " b ", " c "], chooser))
+}

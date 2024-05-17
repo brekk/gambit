@@ -1,0 +1,23 @@
+import String from "String"
+
+
+
+export alias Buffer a = { clear :: {} -> {}, get :: {} -> a, pop :: {} -> {}, push :: a -> a }
+
+make :: String -> Buffer String
+export make = (initial) => {
+  buff = initial
+  return {
+    clear: () => {
+      buff := ""
+    },
+    get: () => buff,
+    pop: () => {
+      buff := String.dropLast(1, buff)
+    },
+    push: (str) => {
+      buff := buff ++ str
+      return str
+    },
+  }
+}
