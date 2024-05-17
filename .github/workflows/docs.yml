@@ -34,7 +34,7 @@ jobs:
           echo "LIST TRANSPILED VARIABLE NAMES"
           echo "event constructor: $EC_TRANSPILED_NAME"
           echo "event handler: $EH_TRANSPILED_NAME"
-          sed -i "s/const handler = wrapEventHandler/const wrapEventHandler = $(echo $EH_TRANSPILED_NAME);\nconst EventConstructors = $(echo $EC_TRANSPILED_NAME);\nconst handler = wrapEventHandler/g" .docs/bundle.js
+          sed -i "s/const handler = wrapEventHandler/const wrapEventHandler = $($EH_TRANSPILED_NAME);\nconst EventConstructors = $($EC_TRANSPILED_NAME);\nconst handler = wrapEventHandler/g" .docs/bundle.js
           echo "LIST CONTENTS OF DOCS"
           grep "handler = wrapEventHandler" -C5 .docs/bundle.js
 
