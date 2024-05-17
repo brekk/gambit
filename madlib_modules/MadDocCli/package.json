@@ -1,0 +1,16 @@
+{
+  "name": "maddoc-cli",
+  "version": "0.0.11",
+  "description": "A Madlib tool for generating documentation!",
+  "bin": "build/src/maddoc-cli.js",
+  "dependencies": {
+    "sass": "^1.32.8",
+    "snabbdom": "^3.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "madlib compile --bundle -i src/Main.mad -o build/src/maddoc-cli.js"
+  },
+  "author": "madlib-lang",
+  "license": "ISC"
+}

@@ -1,0 +1,32 @@
+import IO from "IO"
+
+
+
+export ESC = {
+  CTRL_C: "\x03",
+  BACKSPACE: "\x7F",
+  ENTER: "\r",
+  CLEAR: "\x1b[2J\x1b[H",
+  SAVE_CURSOR: "\x1b7",
+  RESTORE_CURSOR: "\x1b8",
+  ERASE_AFTER_CURSOR: "x1b[0J",
+  ARROW_UP: "\x1B[A",
+  ARROW_DOWN: "\x1B[B",
+  ARROW_RIGHT: "\x1B[C",
+  ARROW_LEFT: "\x1B[D",
+}
+
+enprint :: String -> {} -> {}
+export enprint = (str) => () => IO.put(str)
+
+clear :: {} -> {}
+export clear = enprint("\x1b[2J\x1b[H")
+
+saveCursor :: {} -> {}
+export saveCursor = enprint("\x1b7")
+
+restoreCursor :: {} -> {}
+export restoreCursor = enprint("\x1b8")
+
+eraseAfterCursor :: {} -> {}
+export eraseAfterCursor = enprint("\x1b[0J")

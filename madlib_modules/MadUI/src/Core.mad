@@ -1,0 +1,118 @@
+import type { Config } from "@/Config"
+import type { Element } from "@/Element"
+
+import { get } from "Dictionary"
+import {} from "Number"
+
+import { DEFAULT_CONFIG } from "@/Config"
+import { runAction, wrapEventHandler } from "@/CoreUtils"
+import { EventConstructors } from "@/Event"
+
+
+
+#-
+import {
+  attributesModule as madui_attributesModule,
+  init as madui_init,
+  propsModule as madui_propsModule,
+  eventListenersModule as madui_eventListenersModule,
+  styleModule as madui_styleModule
+} from "snabbdom"
+-#
+
+
+
+getUrl :: a -> String
+export getUrl = () => #- document.location.href || "" -#
+
+
+getPathName :: a -> String
+export getPathName = () => #- document.location.pathname || "" -#
+
+
+
+#-
+const startGlobalEventHandlers = (env, globalActions) => {
+  const keysForWindowEvents = [];
+  while (globalActions !== null) {
+    keysForWindowEvents.push(({
+      eventName: globalActions.v.__args[0],
+      eventHandler: globalActions.v.__args[1],
+    }))
+    globalActions = globalActions.n
+  }
+
+  keysForWindowEvents.forEach(ga => {
+    const handler = wrapEventHandler(env, EventConstructors[ga.eventName], ga.eventHandler)
+    window.addEventListener(ga.eventName, handler)
+
+    if (ga.eventName === "popstate") {
+      handler({})
+    }
+  })
+}
+-#
+
+
+#-
+const hashFixModule = () => {
+  let triggered = false
+  history.scrollRestoration = "manual"
+  return {
+    post: () => {
+      if (!triggered) {
+        const element = document.getElementById(window.location.hash.substr(1))
+        if (element) {
+          const top = element.offsetTop
+          window.scrollTo(0, top)
+        }
+      }
+      triggered = true
+    },
+  }
+}
+-#
+
+_renderWithConfig :: w -> Config a -> (a -> Element a) -> a -> String -> {}
+export _renderWithConfig = (_runAction, config, view, initialState, containerId) => {
+  #-
+  window.env = {
+    routingKind: config.routingKind.__constructor,
+    patch: null,
+    currentElement: null,
+    currentState: null,
+    rootView: null,
+  }
+  -#
+  initialElement = view(initialState)
+  #-
+  const patch = madui_init([madui_attributesModule, madui_propsModule, madui_eventListenersModule, madui_styleModule, hashFixModule()])
+  patch(document.getElementById(containerId), initialElement)
+
+  window.env.patch = patch
+  window.env.currentElement = initialElement
+  window.env.rootView = view
+  window.env.currentState = initialState
+
+  startGlobalEventHandlers(window.env, config.globalEventHandlers)
+  // needed to make the router work
+  window.addEventListener("popstate", () => { _runAction(window.env)(x => x) })
+
+  let subs = config.subscriptions
+  while (subs !== null) {
+    subs.v(_runAction(window.env))
+    subs = subs.n
+  }
+  -#
+
+  return {}
+}
+
+renderWithConfig :: Config a -> (a -> Element a) -> a -> String -> {}
+export renderWithConfig = _renderWithConfig(runAction)
+
+/**
+ * render - boostraps the app and takes a component, and an initial state as parameters
+ */
+render :: (a -> Element a) -> a -> String -> {}
+export render = renderWithConfig(DEFAULT_CONFIG)

@@ -1,0 +1,43 @@
+import type { Wish } from "Wish"
+
+import type { Event } from "@/Event"
+
+import {} from "Wish"
+
+
+
+export alias Action a = a -> Event -> List (Wish (a -> a) (a -> a))
+
+
+syncAction :: (a -> Event -> a) -> Action a
+export syncAction = (stateUpdate) => ((_, event) => [of(stateUpdate($, event))])
+
+throttleAction :: Integer -> Action a -> Action a
+export throttleAction = (amount, action) => {
+  #- let timestamp = new Date().getTime() -#
+  return (state, event) => #-{
+    const currentTime = new Date().getTime()
+    if (timestamp + amount > currentTime) {
+      return null;
+    }
+
+    timestamp = currentTime
+    return action(state)(event)
+  }-#
+}
+
+export type GlobalAction a = GlobalAction(String, Action a)
+
+export onAfterPrint = GlobalAction("afterprint")
+export onBeforePrint = GlobalAction("beforeprint")
+export onBeforeUnload = GlobalAction("beforeunload")
+export onDocumentLoad = GlobalAction("load")
+export onPageHide = GlobalAction("pagehide")
+export onPageShow = GlobalAction("pageshow")
+export onOffline = GlobalAction("offline")
+export onOnline = GlobalAction("online")
+export onResize = GlobalAction("resize")
+export onBodyScroll = GlobalAction("scroll")
+export onStorage = GlobalAction("storage")
+export onUnload = GlobalAction("unload")
+export onUrlChanged = GlobalAction("popstate")

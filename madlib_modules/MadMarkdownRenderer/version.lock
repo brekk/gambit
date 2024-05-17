@@ -1,0 +1,30 @@
+{
+  "buildHash": "94be44f7f23efa0d17b007a74debea6d",
+  "jsApi": {
+    "apiInstances": [],
+    "apiAliases": {},
+    "apiInterfaces": {},
+    "apiNames": {
+      "renderMarkdownWithConfig": "{ codeView :: String -> String -> Element a, linkView :: String -> String -> Element a } -> String -> Element a",
+      "setLinkView": "(String -> String -> Element a) -> { codeView :: String -> String -> Element a, linkView :: String -> String -> Element a } -> { codeView :: String -> String -> Element a, linkView :: String -> String -> Element a }",
+      "renderMarkdown": "String -> Element a",
+      "setCodeView": "(String -> String -> Element a) -> { codeView :: String -> String -> Element a, linkView :: String -> String -> Element a } -> { codeView :: String -> String -> Element a, linkView :: String -> String -> Element a }",
+      "defaultConfig": "{ codeView :: String -> String -> Element a, linkView :: String -> String -> Element a }"
+    },
+    "apiTypes": {}
+  },
+  "llvmApi": {
+    "apiInstances": [],
+    "apiAliases": {},
+    "apiInterfaces": {},
+    "apiNames": {
+      "renderMarkdownWithConfig": "{ codeView :: String -> String -> Element a, linkView :: String -> String -> Element a } -> String -> Element a",
+      "setLinkView": "(String -> String -> Element a) -> { codeView :: String -> String -> Element a, linkView :: String -> String -> Element a } -> { codeView :: String -> String -> Element a, linkView :: String -> String -> Element a }",
+      "renderMarkdown": "String -> Element a",
+      "setCodeView": "(String -> String -> Element a) -> { codeView :: String -> String -> Element a, linkView :: String -> String -> Element a } -> { codeView :: String -> String -> Element a, linkView :: String -> String -> Element a }",
+      "defaultConfig": "{ codeView :: String -> String -> Element a, linkView :: String -> String -> Element a }"
+    },
+    "apiTypes": {}
+  },
+  "versionHash": "47354877541923135499c38a6606138a"
+}

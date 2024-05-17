@@ -1,0 +1,200 @@
+import type { Key } from "@/Key"
+
+import { getKeyFromCode } from "@/Key"
+
+
+
+// https://www.w3schools.com/tags/ref_eventattributes.asp
+
+
+alias BaseEvent = {
+  bubbles :: Boolean,
+  defaultPrevented :: Boolean,
+  eventType :: String,
+  preventDefault :: {} -> {},
+  stopImmediatePropagation :: {} -> {},
+  stopPropagation :: {} -> {},
+  timeStamp :: Integer,
+}
+
+
+export type Event
+  = AbstractEvent(BaseEvent)
+  | MouseEvent({ ...BaseEvent, clientX :: Integer, clientY :: Integer })
+  | InputEvent({
+    ...BaseEvent,
+    data :: String,
+    // Make an InputType type for it
+    inputType :: String,
+    target :: { innerText :: String, value :: String },
+  })
+  | KeyboardEvent({
+    ...BaseEvent,
+    altKey :: Boolean,
+    ctrlKey :: Boolean,
+    key :: Key,
+    shiftKey :: Boolean,
+  })
+  | PopStateEvent({ ...BaseEvent, path :: String, url :: String })
+
+
+// https://www.w3schools.com/jsref/obj_keyboardevent.asp
+export buildKeyboardEvent = (e) => {
+  k = getKeyFromCode(e.keyCode)
+
+  return KeyboardEvent({
+    bubbles: e.bubbles,
+    defaultPrevented: e.defaultPrevented,
+    preventDefault: e.preventDefault,
+    stopImmediatePropagation: e.stopImmediatePropagation,
+    stopPropagation: e.stopPropagation,
+    timeStamp: e.timeStamp,
+    eventType: e.eventType,
+    key: k,
+    altKey: e.altKey,
+    ctrlKey: e.ctrlKey,
+    shiftKey: e.shiftKey,
+  })
+}
+
+
+export buildInputEvent = (e) => InputEvent({
+  bubbles: e.bubbles,
+  defaultPrevented: e.defaultPrevented,
+  preventDefault: e.preventDefault,
+  stopImmediatePropagation: e.stopImmediatePropagation,
+  stopPropagation: e.stopPropagation,
+  timeStamp: e.timeStamp,
+  eventType: e.eventType,
+  target: e.target,
+  data: e.data,
+  inputType: e.inputType,
+})
+
+
+addDataTransfer :: a -> b -> a
+addDataTransfer = (event, e) => #-{
+  return { ...event, dataTransfer: e.dataTransfer }
+}-#
+
+
+export buildMouseEvent = (e) => MouseEvent(
+  addDataTransfer({
+    bubbles: e.bubbles,
+    defaultPrevented: e.defaultPrevented,
+    preventDefault: e.preventDefault,
+    stopImmediatePropagation: e.stopImmediatePropagation,
+    stopPropagation: e.stopPropagation,
+    timeStamp: e.timeStamp,
+    eventType: e.eventType,
+    clientX: e.clientX,
+    clientY: e.clientY,
+  })(e),
+)
+
+
+export buildAbstractEvent = (e) => AbstractEvent({
+  bubbles: e.bubbles,
+  defaultPrevented: e.defaultPrevented,
+  preventDefault: e.preventDefault,
+  stopImmediatePropagation: e.stopImmediatePropagation,
+  stopPropagation: e.stopPropagation,
+  timeStamp: e.timeStamp,
+  eventType: e.eventType,
+})
+
+
+export buildPopStateEvent = (e) => PopStateEvent({
+  url: #- document.location.href -#,
+  path: #-
+    window.env.routingKind === "BasicRouting"
+      ? document.location.pathname
+      : document.location.hash.substr(1) || "/"
+  -#,
+  bubbles: e.bubbles,
+  defaultPrevented: e.defaultPrevented,
+  preventDefault: e.preventDefault,
+  stopImmediatePropagation: e.stopImmediatePropagation,
+  stopPropagation: e.stopPropagation,
+  timeStamp: e.timeStamp,
+  eventType: e.eventType,
+})
+
+
+export EventConstructors = {
+  abort: buildAbstractEvent,
+  afterprint: buildAbstractEvent,
+  beforeprint: buildAbstractEvent,
+  beforeunload: buildAbstractEvent,
+  blur: buildAbstractEvent,
+  canplay: buildAbstractEvent,
+  canplaythrough: buildAbstractEvent,
+  change: buildAbstractEvent,
+  click: buildMouseEvent,
+  contextmenu: buildAbstractEvent,
+  copy: buildAbstractEvent,
+  cuechange: buildAbstractEvent,
+  cut: buildAbstractEvent,
+  dblclick: buildMouseEvent,
+  drag: buildMouseEvent,
+  dragend: buildMouseEvent,
+  dragenter: buildMouseEvent,
+  dragleave: buildMouseEvent,
+  dragover: buildMouseEvent,
+  dragstart: buildMouseEvent,
+  drop: buildMouseEvent,
+  durationchange: buildAbstractEvent,
+  emptied: buildAbstractEvent,
+  ended: buildAbstractEvent,
+  error: buildAbstractEvent,
+  focus: buildAbstractEvent,
+  input: buildInputEvent,
+  invalid: buildAbstractEvent,
+  keydown: buildKeyboardEvent,
+  keypress: buildKeyboardEvent,
+  keyup: buildKeyboardEvent,
+  load: buildAbstractEvent,
+  loadeddata: buildAbstractEvent,
+  loadedmetadata: buildAbstractEvent,
+  loadstart: buildAbstractEvent,
+  mousedown: buildMouseEvent,
+  mouseenter: buildMouseEvent,
+  mouseleave: buildMouseEvent,
+  mousemove: buildMouseEvent,
+  mouseout: buildMouseEvent,
+  mouseover: buildMouseEvent,
+  mouseup: buildMouseEvent,
+  mousewheel: buildMouseEvent,
+  offline: buildAbstractEvent,
+  online: buildAbstractEvent,
+  pagehide: buildAbstractEvent,
+  pageshow: buildAbstractEvent,
+  paste: buildAbstractEvent,
+  pause: buildAbstractEvent,
+  play: buildAbstractEvent,
+  playing: buildAbstractEvent,
+  popstate: buildPopStateEvent,
+  progress: buildAbstractEvent,
+  ratechange: buildAbstractEvent,
+  reset: buildAbstractEvent,
+  resize: buildAbstractEvent,
+  scroll: buildAbstractEvent,
+  search: buildAbstractEvent,
+  seeked: buildAbstractEvent,
+  seeking: buildAbstractEvent,
+  select: buildAbstractEvent,
+  stalled: buildAbstractEvent,
+  storage: buildAbstractEvent,
+  submit: buildAbstractEvent,
+  suspend: buildAbstractEvent,
+  timeupdate: buildAbstractEvent,
+  toggle: buildAbstractEvent,
+  transitioncancel: buildAbstractEvent,
+  transitionend: buildAbstractEvent,
+  transitionrun: buildAbstractEvent,
+  transitionstart: buildAbstractEvent,
+  unload: buildAbstractEvent,
+  volumechange: buildAbstractEvent,
+  waiting: buildAbstractEvent,
+  wheel: buildAbstractEvent,
+}

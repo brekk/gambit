@@ -1,6 +1,7 @@
 name: Test Madlib Project
 
-on: [push, workflow_dispatch]
+# on: [push, workflow_dispatch]
+on: [workflow_dispatch]
     
 env:
   node-version: 20.x
@@ -9,17 +10,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: 🛒 Checking out repository...
-        uses: actions/checkout@v4
-
-      - name: ⚙️  Setting up node...
-        uses: actions/setup-node@v4
+      - name: 😈 Building and testing Madlib project...
+        uses: madlib-lang/action-build@main
         with:
-          node-version: ${{ env.node-version }}
-
-      - name: 😈 Installing and Testing Library...
-        run: |
-          npm install -g @madlib-lang/madlib
-          madlib install
-          madlib test --coverage -t llvm
-          madlib test --coverage -t node
+          madlibVersion: 0.23.14
+          coverage: true
+          testLLVM: true
+          testJS: true
