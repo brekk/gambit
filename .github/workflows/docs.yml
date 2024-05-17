@@ -28,11 +28,11 @@ jobs:
           ls -Algp .docs
           echo "wrapEventHandler..."
           grep _wrapEventHandler_ -m 1 .docs/bundle.js | cut -d" " -f4
-          echo "EH_TRANSPILED_NAME=$(grep _wrapEventHandler_ -m 1 .docs/bundle.js | cut -d" " -f4)"
+          EH_TRANSPILED_NAME=\"$(grep _wrapEventHandler_ -m 1 .docs/bundle.js | cut -d" " -f4)\"
           echo "EH_TRANSPILED_NAME=\"$(grep _wrapEventHandler_ -m 1 .docs/bundle.js | cut -d" " -f4)\"" >> "$GITHUB_ENV"
           echo "EventConstructors..."
           grep _EventConstructors_ -m 1 .docs/bundle.js | cut -d" " -f4
-          echo "EC_TRANSPILED_NAME=$(grep _EventConstructors_ -m 1 .docs/bundle.js | cut -d" " -f4)"
+          EC_TRANSPILED_NAME=\"$(grep _EventConstructors_ -m 1 .docs/bundle.js | cut -d" " -f4)\"
           echo "EC_TRANSPILED_NAME=\"$(grep _EventConstructors_ -m 1 .docs/bundle.js | cut -d" " -f4)\"" >> "$GITHUB_ENV"
           echo "LIST TRANSPILED VARIABLE NAMES"
           echo "event constructor: $EC_TRANSPILED_NAME"
