@@ -1,7 +1,6 @@
 {
   "name": "gambit",
   "version": "0.0.4",
-  "madlibVersion": "0.23.13",
   "main": "src/Gambit.mad",
   "importAliases": {
     ".": "src"
