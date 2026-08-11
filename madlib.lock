@@ -1,0 +1,62 @@
+{
+  "lockfileVersion": 1,
+  "packages": {
+    "https://github.com/brekk/clinic/archive/refs/tags/v0.0.1.zip": {
+      "buildHash": "00aae10ec95fdb69be551a9c57cc7668",
+      "dependencies": [],
+      "name": "clinic",
+      "version": "0.0.1",
+      "versionHash": "ee5597d6e8f925bb2a434f7e19ff8ca6"
+    },
+    "https://github.com/brekk/study/archive/refs/tags/v0.0.6.zip": {
+      "buildHash": "ea22d1b4088f66d9160d10e6d0079eb7",
+      "dependencies": [],
+      "name": "study",
+      "version": "0.0.6",
+      "versionHash": "cf12946e6e3b4847d54e3b71a38c6145"
+    },
+    "https://github.com/madlib-lang/maddoc-cli/archive/refs/tags/v0.0.11.zip": {
+      "buildHash": "f9c3d8b7a56a307044496d4b039ba711",
+      "dependencies": [
+        "https://github.com/madlib-lang/maddoc/archive/refs/tags/v0.0.9.zip"
+      ],
+      "name": "MadDocCli",
+      "version": "0.0.11",
+      "versionHash": "14745449d1263503a855f104b370e9ef"
+    },
+    "https://github.com/madlib-lang/maddoc/archive/refs/tags/v0.0.9.zip": {
+      "buildHash": "91482e0eb5abece51c3631e4f28a7bae",
+      "dependencies": [
+        "https://github.com/madlib-lang/madmarkdown-renderer/archive/refs/tags/v2.0.4.zip",
+        "https://github.com/madlib-lang/madui/archive/refs/tags/v7.0.2.zip"
+      ],
+      "name": "MadDoc",
+      "version": "0.0.9",
+      "versionHash": "0fe62b963ce472b48dfecf0855803fec"
+    },
+    "https://github.com/madlib-lang/madmarkdown-parser/archive/refs/tags/v0.0.5.zip": {
+      "buildHash": "7edb43fc2c3f4acf1264f571bfce5422",
+      "dependencies": [],
+      "name": "MadMarkdownParser",
+      "version": "0.0.5",
+      "versionHash": "6f5875ccf8d5e2a94e7e8b1b16c59dbe"
+    },
+    "https://github.com/madlib-lang/madmarkdown-renderer/archive/refs/tags/v2.0.4.zip": {
+      "buildHash": "ea37ba0352a18994bc2c736cfcc38ee1",
+      "dependencies": [
+        "https://github.com/madlib-lang/madui/archive/refs/tags/v7.0.2.zip",
+        "https://github.com/madlib-lang/madmarkdown-parser/archive/refs/tags/v0.0.5.zip"
+      ],
+      "name": "MadMarkdownRenderer",
+      "version": "2.0.4",
+      "versionHash": "5f90d04fa0aa89358f06befd0de5c66e"
+    },
+    "https://github.com/madlib-lang/madui/archive/refs/tags/v7.0.2.zip": {
+      "buildHash": "830b77fe0656ce1b65ee07d056293bc5",
+      "dependencies": [],
+      "name": "MadUI",
+      "version": "7.0.2",
+      "versionHash": "573eaddcda2e0b89776a6896ff06ca4c"
+    }
+  }
+}

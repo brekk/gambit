@@ -1,11 +1,17 @@
 import Integer from "Integer"
 import List from "List"
+import { Just, Nothing } from "Maybe"
+import {} from "Scan"
 import { assertEquals, test } from "Test"
+
+import Study from "Study"
 
 import {
   Ace,
   Card,
+  Clubs,
   Diamonds,
+  Hearts,
   InvalidRank,
   Jack,
   Joker,
@@ -36,12 +42,93 @@ import {
   suit,
   toOrdinal,
   toOrdinalLow,
-} from "./Cards"
+} from "@/Cards"
 
 
 
-test("suit", () => assertEquals(suit(diamond(Ace)), Diamonds))
-test("rank", () => assertEquals(rank(club(InvalidRank)), InvalidRank))
+Study.report(
+  suit,
+  "suit",
+  [
+    #[diamond(Ace), Diamonds],
+    #[club(King), Clubs],
+    #[spade(Queen), Spades],
+    #[heart(Jack), Hearts],
+  ],
+)
+Study.report(
+  rank,
+  "rank",
+  [#[club(InvalidRank), InvalidRank], #[club(NoFace(4)), NoFace(4)], #[diamond(Queen), Queen]],
+)
+test(
+  "ranks can be compared",
+  () => do {
+    four = rank(club(NoFace(4)))
+    queen = rank(diamond(Queen))
+    eight = rank(diamond(NoFace(8)))
+    _ <- assertEquals(List.sort([eight, four, queen]), [four, eight, queen])
+    _ <- assertEquals(queen > four, true)
+    _ <- assertEquals(queen == queen, true)
+    return assertEquals(four < eight, true)
+  },
+)
+test(
+  "cards can be compared",
+  () => do {
+    four = club(NoFace(4))
+    queen = diamond(Queen)
+    queen2 = spade(Queen)
+    eight = diamond(NoFace(8))
+    _ <- assertEquals(List.sort([eight, queen2, four, queen]), [four, eight, queen2, queen])
+    _ <- assertEquals(queen > four, true)
+    return assertEquals(four < eight, true)
+  },
+)
+Study.report(
+  scan,
+  "scan works on ranks",
+  [
+    #["1", Just(Ace)],
+    #["A", Just(Ace)],
+    #["2", Just(NoFace(2))],
+    #["3", Just(NoFace(3))],
+    #["4", Just(NoFace(4))],
+    #["5", Just(NoFace(5))],
+    #["6", Just(NoFace(6))],
+    #["7", Just(NoFace(7))],
+    #["8", Just(NoFace(8))],
+    #["9", Just(NoFace(9))],
+    #["10", Just(NoFace(10))],
+    #["11", Just(Jack)],
+    #["J", Just(Jack)],
+    #["12", Just(Queen)],
+    #["Q", Just(Queen)],
+    #["13", Just(King)],
+    #["K", Just(King)],
+    #["*", Just(Wildcard)],
+    #["100", Just(InvalidRank)],
+    #["nononon", Just(InvalidRank)],
+  ],
+)
+test(
+  "scan works on suits",
+  () => do {
+    _ <- assertEquals(scan("J"), Just(Joker))
+    _ <- assertEquals(scan("C"), Just(Clubs))
+    _ <- assertEquals(scan("S"), Just(Spades))
+    _ <- assertEquals(scan("D"), Just(Diamonds))
+    return assertEquals(scan("H"), Just(Hearts))
+  },
+)
+test(
+  "ranked values can be compared",
+  () => {
+    four = rank(club(NoFace(4)))
+    queen = rank(diamond(Queen))
+    return assertEquals(four < queen, true)
+  },
+)
 test(
   "toOrdinal",
   () => assertEquals(
@@ -49,7 +136,6 @@ test(
     [-1, 0, 14, 13, 12, 11, -100],
   ),
 )
-
 test(
   "toOrdinalLow",
   () => assertEquals(
@@ -57,7 +143,6 @@ test(
     [-1, 0, 1, 13, 12, 11, -100],
   ),
 )
-
 test(
   "rankFrom",
   () => assertEquals(
@@ -71,19 +156,12 @@ test(
     [Jack, Queen, King, Ace, Wildcard, InvalidRank, NoFace(8)],
   ),
 )
-
 test("isSuit", () => assertEquals(isSuit(Joker, joker(InvalidRank)), true))
-
 test("isRank", () => assertEquals(isRank(Wildcard, heart(Wildcard)), true))
-
 test("match", () => assertEquals(match(Joker, Wildcard, joker(Wildcard)), true))
-
 test("sameCard", () => assertEquals(sameCard(spade(Wildcard), Card(Spades, Wildcard)), true))
-
 test("sameRank", () => assertEquals(sameRank(spade(Ace), diamond(Ace)), true))
-
 test("sameSuit", () => assertEquals(sameSuit(spade(Ace), spade(Jack)), true))
-
 test(
   "isFaceCard",
   () => assertEquals(
@@ -97,18 +175,13 @@ test(
     [false, false, false, true],
   ),
 )
-
 test("consecutiveAceHigh", () => assertEquals(consecutiveAceHigh(spade(Ace), spade(King)), true))
-
 test(
   "consecutiveAceHigh",
   () => assertEquals(consecutiveAceLow(spade(Ace), spade(NoFace(2))), true),
 )
-
 test("consecutiveFlush", () => assertEquals(consecutiveFlush(true, spade(Ace), spade(King)), true))
-
 test("isNoFaceCard", () => assertEquals(isNoFaceCard(spade(NoFace(3))), true))
-
 test(
   "isNonStandardRank",
   () => assertEquals(

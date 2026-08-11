@@ -1,5 +1,10 @@
+import {} from "Byte"
 import { EQ, GT, LT } from "Compare"
 import Math from "Math"
+import { Just, Nothing } from "Maybe"
+import {} from "Scan"
+import Short from "Short"
+import String from "String"
 
 
 
@@ -10,6 +15,21 @@ import Math from "Math"
  * import type { Suit } from "Gambit"
  */
 export type Suit = Clubs | Diamonds | Hearts | Spades | Joker
+instance Scan Suit {
+  scan = (a) => Just(
+    if (a == "C") {
+      Clubs
+    } else if (a == "D") {
+      Diamonds
+    } else if (a == "H") {
+      Hearts
+    } else if (a == "S") {
+      Spades
+    } else {
+      Joker
+    },
+  )
+}
 /**
  * A type which specifies the point value of a given card.
  * In addition to traditional values, two additional constructors: Wildcard and InvalidRank
@@ -23,8 +43,39 @@ instance Comparable Rank {
   compare = (a, b) => {
     _a = toOrdinal(a)
     _b = toOrdinal(b)
-    return _a < _b ? LT : _a > _b ? GT : EQ
+    return if (_a < _b) {
+      LT
+    } else if (_a > _b) {
+      GT
+    } else {
+      EQ
+    }
   }
+}
+instance Scan Rank {
+  scan = (a) => pipe(
+    String.toUpper,
+    (b) => if (b == "J") {
+      Jack
+    } else if (b == "Q") {
+      Queen
+    } else if (b == "K") {
+      King
+    } else if (b == "A") {
+      Ace
+    } else if (b == "*") {
+      Wildcard
+    } else {
+      where(scan(b)) {
+        Just(_b) =>
+          rankFrom(_b)
+
+        _ =>
+          InvalidRank
+      }
+    },
+    Just,
+  )(a)
 }
 /**
  * A type which specifies a given Suit and Rank combination
