@@ -7,6 +7,8 @@ import { Just, Nothing } from "Maybe"
 import Random from "Random"
 import { assertEquals, test } from "Test"
 
+import Study from "Study"
+
 import {
   Ace,
   Card,
@@ -40,6 +42,7 @@ import {
   getNonFaceCards,
   has,
   rejectBySuit,
+  remove,
   sort,
   sortLow,
   sortLowWithTrump,
@@ -48,6 +51,7 @@ import {
 
 
 
+Study.report(remove($, DECK_WITH_JOKERS), "remove", [#[Card(Joker, Wildcard), DECK]])
 test(
   "deal",
   () => assertEquals(
@@ -122,10 +126,8 @@ test(
     ]),
   ),
 )
-
 test("deal - invalid counts", () => assertEquals(deal(-1, -1, []), Nothing))
 test("deal - invalid inputs", () => assertEquals(deal(4, 15, DECK_WITH_JOKERS), Nothing))
-
 test(
   "filterBySuit",
   () => assertEquals(
@@ -140,7 +142,6 @@ test(
     [Card(Diamonds, NoFace(1000))],
   ),
 )
-
 test(
   "getFaceCards",
   () => assertEquals(
@@ -153,7 +154,6 @@ test(
     [Card(Joker, Ace)],
   ),
 )
-
 test(
   "getNonFaceCards",
   () => assertEquals(
@@ -166,7 +166,6 @@ test(
     [Card(Joker, NoFace(7))],
   ),
 )
-
 test(
   "sortWithTrump",
   () => assertEquals(
@@ -199,7 +198,6 @@ test(
     ],
   ),
 )
-
 test(
   "sortLowWithTrump",
   () => assertEquals(
@@ -232,7 +230,6 @@ test(
     ],
   ),
 )
-
 test(
   "sort",
   () => assertEquals(
@@ -262,7 +259,6 @@ test(
     ],
   ),
 )
-
 test(
   "sortLow",
   () => assertEquals(
@@ -292,7 +288,6 @@ test(
     ],
   ),
 )
-
 test(
   "has",
   () => assertEquals(
@@ -314,7 +309,6 @@ test(
     true,
   ),
 )
-
 test(
   "dedupe",
   () => assertEquals(
@@ -333,9 +327,7 @@ test(
     [Card(Joker, Wildcard), Card(Spades, Ace)],
   ),
 )
-
 test("anyMatchingRank", () => assertEquals(anyMatchingRank(spade(Ace), [spade(Ace)]), true))
-
 test(
   "findSameRank",
   () => assertEquals(

@@ -41,7 +41,6 @@ __makeFullSuit = (s) => [
   Card(s, King),
   Card(s, Ace),
 ]
-
 /**
  * A full deck of French-suited Cards.
  * @since 0.0.1
@@ -57,7 +56,6 @@ export DECK = [
   ...__makeFullSuit(Hearts),
   ...__makeFullSuit(Spades),
 ]
-
 /**
  * A full deck of French-suited Cards, plus two Jokers.
  * @since 0.0.1
@@ -75,7 +73,6 @@ export DECK_WITH_JOKERS = [
   Card(Joker, Wildcard),
   Card(Joker, Wildcard),
 ]
-
 /**
  * Compare two cards, with respect to ace-high evaluation and a trump Suit.
  * @since 0.0.1
@@ -100,7 +97,6 @@ export compareWithTrump = (aceHigh, trumpSuit, a, b) => where(#[a, b]) {
       }
     }
 }
-
 /**
  * Sort cards descending, with respect to ace-high evaluation and a trump Suit.
  * @since 0.0.1
@@ -113,7 +109,6 @@ export sortDescWithTrump = (aceHigh, trumpSuit, cards) => List.sortBy(
   compareWithTrump(aceHigh, trumpSuit),
   cards,
 )
-
 /**
  * Sort cards descending, assuming ace-high evaluation and with respect to a trump Suit.
  * @since 0.0.1
@@ -122,7 +117,6 @@ export sortDescWithTrump = (aceHigh, trumpSuit, cards) => List.sortBy(
  * sortWithTrump(true, Clubs, DECK)
  */
 export sortWithTrump = sortDescWithTrump(true)
-
 /**
  * Sort cards descending, assuming ace-low evaluation and with respect to a trump Suit.
  * @since 0.0.1
@@ -131,7 +125,6 @@ export sortWithTrump = sortDescWithTrump(true)
  * sortLowWithTrump(true, Clubs, DECK)
  */
 export sortLowWithTrump = sortDescWithTrump(false)
-
 /**
  * Sort cards descending, with respect to ace-high evaluation
  * @since 0.0.1
@@ -151,7 +144,6 @@ export sortDesc = (aceHigh, cards) => List.sortBy(
   },
   cards,
 )
-
 /**
  * Sort cards descending, assuming ace-high evaluation
  * @since 0.0.1
@@ -160,7 +152,6 @@ export sortDesc = (aceHigh, cards) => List.sortBy(
  * sort(DECK)
  */
 export sort = sortDesc(true)
-
 /**
  * Sort cards descending, assuming ace-low evaluation
  * @since 0.0.1
@@ -169,7 +160,6 @@ export sort = sortDesc(true)
  * sort(DECK)
  */
 export sortLow = sortDesc(false)
-
 /**
  * Test whether a given card is within a List of Cards
  * @since 0.0.1
@@ -178,11 +168,7 @@ export sortLow = sortDesc(false)
  * has(club(Ace), []) // false
  */
 has :: Card -> List Card -> Boolean
-export has = (c, cs) => where(c) {
-  Card(d, v) =>
-    List.any(where { Card(d2, v2) => d == d2 && v == v2 }, cs)
-}
-
+export has = (c, cs) => List.any(Cards.sameCard(c), cs)
 /**
  * Remove a card from a list of cards
  * @since 0.0.1
@@ -192,7 +178,6 @@ export has = (c, cs) => where(c) {
  */
 remove :: Card -> List Card -> List Card
 export remove = (c, cs) => List.reject(Cards.sameCard(c))(cs)
-
 /**
  * Test a List of Cards for any Card that is of the same rank as a given Card
  * @since 0.0.1
@@ -205,20 +190,17 @@ export anyMatchingRank = (c, cs) => where(c) {
   Card(_, v) =>
     List.any(where { Card(_, v2) => v == v2 }, cs)
 }
-
 // remove if bifunctor tuples land
 mapFst :: (a -> c) -> #[a, b] -> #[c, b]
 mapFst = (fn, tuple) => where(tuple) {
   #[a, b] =>
     #[fn(a), b]
 }
-
 __recut :: Integer -> Integer -> List a -> List (List a)
 __recut = (per, times, xs) => List.repeatWith(
   (i) => List.slice(i * per, ((i + 1) * per) - 1, xs),
   times,
 )
-
 /**
  * Take a list of cards and possibly segment them into sublists of a specific number per player.
  * @since 0.0.1
@@ -239,7 +221,6 @@ export deal = (perPlayer, totalPlayers, cards) => {
     )(cards)
   }
 }
-
 /**
  * Filter a List of Cards by a given Suit
  * @since 0.0.1
@@ -249,7 +230,6 @@ export deal = (perPlayer, totalPlayers, cards) => {
  */
 filterBySuit :: Suit -> List Card -> List Card
 export filterBySuit = (s, cs) => List.filter(Cards.isSuit(s), cs)
-
 /**
  * Reject a List of Cards by a given Suit
  * @since 0.0.1
@@ -259,7 +239,6 @@ export filterBySuit = (s, cs) => List.filter(Cards.isSuit(s), cs)
  */
 rejectBySuit :: Suit -> List Card -> List Card
 export rejectBySuit = (s, cs) => List.reject(Cards.isSuit(s), cs)
-
 /**
  * Get face cards from a given list of cards
  * @since 0.0.1
@@ -269,7 +248,6 @@ export rejectBySuit = (s, cs) => List.reject(Cards.isSuit(s), cs)
  */
 getFaceCards :: List Card -> List Card
 export getFaceCards = List.filter(Cards.isFaceCard)
-
 /**
  * Get non-face cards from a given list of cards
  * @since 0.0.1
@@ -279,7 +257,6 @@ export getFaceCards = List.filter(Cards.isFaceCard)
  */
 getNonFaceCards :: List Card -> List Card
 export getNonFaceCards = List.filter(Cards.isNoFaceCard)
-
 /**
  * Return a unique list of cards
  * @since 0.0.1
@@ -289,7 +266,6 @@ export getNonFaceCards = List.filter(Cards.isNoFaceCard)
  */
 dedupe :: List Card -> List Card
 export dedupe = List.uniqueBy(Cards.sameCard)
-
 /**
  * Find cards which are of the same rank within a list
  * @since 0.0.1
