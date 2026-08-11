@@ -1,9 +1,11 @@
 {
-  "buildHash": "b48619db69eb6d42fe8a78a8cfda855a",
+  "buildHash": "b9d8535f3c0cfac64d20f20a1942a06a",
   "jsApi": {
     "apiInstances": [
       "Comparable Card",
-      "Comparable Rank"
+      "Scan Rank",
+      "Comparable Rank",
+      "Scan Suit"
     ],
     "apiAliases": {},
     "apiInterfaces": {},
@@ -133,7 +135,9 @@
   "llvmApi": {
     "apiInstances": [
       "Comparable Card",
-      "Comparable Rank"
+      "Scan Rank",
+      "Comparable Rank",
+      "Scan Suit"
     ],
     "apiAliases": {},
     "apiInterfaces": {},
